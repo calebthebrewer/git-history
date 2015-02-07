@@ -1,6 +1,6 @@
 var Github = require('github');
 
-module.exports = new Github({
+var github = new Github({
 	// required
 	version: "3.0.0",
 	// optional
@@ -12,3 +12,10 @@ module.exports = new Github({
 		Accept: 'application/vnd.github.v3+json'
 	}
 });
+
+github.authenticate({
+	type: 'oath',
+	token: 'a11c3aeac53f73dd3451bac177a0144cb7438e26'
+})
+
+module.exports = github;

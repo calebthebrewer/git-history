@@ -6,14 +6,12 @@ angular.module('app')
 
 			var user,
 				repo,
-				path;
-
-			$scope.user = 'calebthebrewer';
-			$scope.repo = 'jsenvy';
-			$scope.path = 'src/console.js';
+				path,
+				commits = {};
 
 			$scope.getCommits = getCommits;
 			$scope.getCommit = getCommit;
+			$scope.commitLoadProgress = 100;
 
 			function getCommits() {
 				$http.get('repositories/commits', {
@@ -33,21 +31,27 @@ angular.module('app')
 					repo = $scope.repo;
 					path = $scope.path;
 					//trigger first commit
-					getCommit(response[0].sha);
+					getCommit($scope.commitsLength, true);
 				});
 			}
 
-			function getCommit(sha) {
+			function getCommit(index, repeat) {
 				$http.get('repositories/commit', {
 					params: {
 						user: user,
 						repo: repo,
 						path: path,
-						sha: sha
+						sha: $scope.commits[index].sha
 					},
 					cache: true
 				}).success(function(response) {
 					$scope.commit = response;
+					if (repeat) {
+						$scope.commitLoadProgress -= (100 / $scope.commitsLength);
+						if (index) {
+							getCommit(--index, true);
+						}
+					}
 				});
 			}
 		}

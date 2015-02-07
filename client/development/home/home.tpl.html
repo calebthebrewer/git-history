@@ -26,7 +26,8 @@
 				class="form-controler"
 				min="0" max={{commitsLength}}" step="1"
 				ng-model="currentCommit"
-				ng-change="getCommit(commits[currentCommit].sha)">
+				ng-change="getCommit(currentCommit)">
+		<div ng-if="commitLoadProgress > 0" progressbar value="commitLoadProgress" class="progress-striped active"></div>
 
 	</div>
 	<div class="row">
@@ -35,7 +36,7 @@
 	</div>
 	<div class="row">
 
-		<h3>{{commits[currentCommit].commit.message}}</h3>
+		<h3 class="commit-detail">{{commits[currentCommit].commit.message}}</h3>
 		<div class="text-muted">
 			<div class="col-sm-4 commit-detail">{{commits[currentCommit].commit.author.name}}</div>
 			<div class="col-sm-4 commit-detail">{{commits[currentCommit].commit.author.date | date: 'medium'}}</div>
