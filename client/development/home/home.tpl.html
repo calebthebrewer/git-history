@@ -1,0 +1,56 @@
+<div class="jumbotron">
+	<div class="container">
+		<h1>Express Angular Seed!</h1>
+
+		<p>Get excited to build off of this very elegant starter application.</p>
+
+		<div class="row">
+			<div class="col-md-12">
+				<form class="form-inline" ng-submit="getCommits()">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="user, eg: calebthebrewer" ng-model="user">
+						<input type="test" class="form-control" placeholder="repository, eg: jsenvy" ng-model="repo">
+						<input type="test" class="form-control" placeholder="path, eg: src/console.js" ng-model="path">
+					</div>
+					<button type="submit" class="btn btn-primary">Git History</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container" ng-if="commits">
+
+	<div class="row">
+		<input
+				type="range"
+				class="form-controler"
+				min="0" max={{commitsLength}}" step="1"
+				ng-model="currentCommit"
+				ng-change="getCommit(commits[currentCommit].sha)">
+
+	</div>
+	<div class="row">
+		<div class="col-xs-6">{{commits[commitsLength].commit.author.date | date: 'medium'}}</div>
+		<div class="col-xs-6 text-right">{{commits[0].commit.author.date | date: 'medium'}}</div>
+	</div>
+	<div class="row">
+
+		<h3>{{commits[currentCommit].commit.message}}</h3>
+		<div class="text-muted">
+			<div class="col-sm-4 commit-detail">{{commits[currentCommit].commit.author.name}}</div>
+			<div class="col-sm-4 commit-detail">{{commits[currentCommit].commit.author.date | date: 'medium'}}</div>
+			<div class="col-sm-4 commit-detail">{{commits[currentCommit].sha}}</div>
+		</div>
+	</div>
+	<div ng-if="commit" class="panel panel-default">
+		<div class="panel-heading">
+			<span class="text-primary">{{commit.status}}...</span>
+			<span class="text-success">+{{commit.additions}}, </span>
+			<span class="text-warning">~{{commit.changes}}, </span>
+			<span class="text-danger">-{{commit.deletions}}</span>
+		</div>
+		<div class="panel-body">
+			<pre>{{commit.patch}}</pre>
+		</div>
+	</div>
+</div>
