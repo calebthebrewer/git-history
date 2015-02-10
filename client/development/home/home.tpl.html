@@ -51,7 +51,7 @@
 			<span class="text-danger">-{{commit.deletions}}</span>
 		</div>
 		<div class="panel-body">
-			<pre>{{commit.patch}}</pre>
+			<pre class="code" ng-bind-html="commit.raw"></pre>
 		</div>
 	</div>
 </div>

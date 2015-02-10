@@ -49,6 +49,7 @@ var vendorCss = [
 		bower + '/angular/angular.min.js',
 		bower + '/ui-router/release/angular-ui-router.min.js',
 		bower + '/angular-animate/angular-animate.min.js',
+		bower + '/angular-sanitize/angular-sanitize.min.js',
 		bower + '/angular-bootstrap/ui-bootstrap-tpls.min.js',
 		bower + '/ng-sortable/dist/ng-sortable.min.js',
 		bower + '/lodash/dist/lodash.min.js',

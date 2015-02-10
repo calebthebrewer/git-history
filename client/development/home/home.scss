@@ -3,3 +3,22 @@
 	white-space: nowrap;
 	overflow: hidden;
 }
+
+.code {
+	counter-reset: linecounter;
+
+	.line-removed,
+	.line {
+		width: 100%;
+		display: inline-block;
+	}
+
+	.line {
+		counter-increment: linecounter;
+
+		&:before {
+			content: counter(linecounter);
+			color: #aaa;
+		}
+	}
+}

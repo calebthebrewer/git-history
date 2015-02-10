@@ -4,8 +4,7 @@ var github = require('../github'),
 
 module.exports = {
 	commits: commits,
-	commit: commit,
-	compare: compare
+	commit: commit
 };
 
 var commitsCache = {},
@@ -51,13 +50,16 @@ function commit(user, repo, path, sha) {
 			if (error) {
 				deferred.reject();
 			} else {
-				response.files.forEach(function(file) {
-					if (file.filename.indexOf(path) > -1) {
-						commitCache[cacheKey] = file;
-						deferred.resolve(file);
+				response.files.forEach(function(commitData) {
+					if (commitData.filename.indexOf(path) > -1) {
+						getRawFile(commitData.raw_url)
+							.then(function(rawData) {
+								commitData.raw = rawData;
+								commitCache[cacheKey] = commitData;
+								deferred.resolve(commitData);
+							});
 					}
 				});
-
 			}
 		});
 	}
@@ -65,31 +67,16 @@ function commit(user, repo, path, sha) {
 	return deferred.promise;
 }
 
-function compare(user, repo, base, head, path) {
-	var deferred = q.defer(),
-		cacheKey = user + '/' + repo + '/' + path + '/' + base + '/' + head;
+function getRawFile(url) {
+	var deferred = q.defer();
 
-	if (commitCache[cacheKey]) {
-		deferred.resolve(commitCache[cacheKey]);
-	} else {
-		github.repos.compareCommits({
-			user: user,
-			repo: repo,
-			base: base,
-			head: head
-		}, function(error, response) {
-			if (error) {
-				deferred.reject();
-			} else {
-				response.files.forEach(function(file) {
-					if (file.filename.indexOf(path) > -1) {
-						commitCache[cacheKey] = file;
-						deferred.resolve(file);
-					}
-				});
-			}
-		});
-	}
+	request(url, function(error, response, body) {
+		if (!error && response.statusCode == 200) {
+			deferred.resolve(body);
+		} else {
+			deferred.reject();
+		}
+	});
 
 	return deferred.promise;
 }
