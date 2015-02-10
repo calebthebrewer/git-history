@@ -14,8 +14,8 @@ var github = new Github({
 });
 
 github.authenticate({
-	type: 'oath',
-	token: 'a11c3aeac53f73dd3451bac177a0144cb7438e26'
-})
+	type: 'oauth',
+	token: '79a786e256717a2d0941bc5bb9caf9b3e777bb51'
+});
 
 module.exports = github;

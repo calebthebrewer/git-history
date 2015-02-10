@@ -2,12 +2,17 @@ angular.module('app')
 .controller('repositories', [
 		'$http',
 		'$scope',
-		function($http, $scope) {
+		'$q',
+		function($http, $scope, $q) {
 
 			var user,
 				repo,
 				path,
 				commits = {};
+
+			$scope.user = 'calebthebrewer';
+			$scope.repo = 'jsenvy';
+			$scope.path = 'src/console.js';
 
 			$scope.getCommits = getCommits;
 			$scope.getCommit = getCommit;
@@ -45,12 +50,34 @@ angular.module('app')
 					},
 					cache: true
 				}).success(function(response) {
-					$scope.commit = response;
 					if (repeat) {
 						$scope.commitLoadProgress -= (100 / $scope.commitsLength);
 						if (index) {
 							getCommit(--index, true);
 						}
+					} else {
+						$scope.commit = response;
+					}
+				});
+			}
+
+			function getCompare(index, repeat) {
+				$http.get('repositories/compare', {
+					params: {
+						user: user,
+						repo: repo,
+						base: $scope.commits[index - 1].sha,
+						head: $scope.commits[index].sha
+					},
+					cache: true
+				}).success(function(response) {
+					if (repeat) {
+						$scope.commitLoadProgress -= (100 / $scope.commitsLength);
+						if (index) {
+							getCommit(--index, true);
+						}
+					} else {
+						$scope.commit = response;
 					}
 				});
 			}

@@ -31,8 +31,8 @@
 
 	</div>
 	<div class="row">
-		<div class="col-xs-6">{{commits[commitsLength].commit.author.date | date: 'medium'}}</div>
-		<div class="col-xs-6 text-right">{{commits[0].commit.author.date | date: 'medium'}}</div>
+		<div class="col-xs-6">{{commits[0].commit.author.date | date: 'medium'}}</div>
+		<div class="col-xs-6 text-right">{{commits[commitsLength].commit.author.date | date: 'medium'}}</div>
 	</div>
 	<div class="row">
 
@@ -40,7 +40,7 @@
 		<div class="text-muted">
 			<div class="col-sm-4 commit-detail">{{commits[currentCommit].commit.author.name}}</div>
 			<div class="col-sm-4 commit-detail">{{commits[currentCommit].commit.author.date | date: 'medium'}}</div>
-			<div class="col-sm-4 commit-detail">{{commits[currentCommit].sha}}</div>
+			<div class="col-sm-4 commit-detail">{{commits[currentCommit].sha | limitTo: 10}}</div>
 		</div>
 	</div>
 	<div ng-if="commit" class="panel panel-default">

@@ -4,7 +4,8 @@ var github = require('../github'),
 
 module.exports = {
 	commits: commits,
-	commit: commit
+	commit: commit,
+	compare: compare
 };
 
 var commitsCache = {},
@@ -53,10 +54,39 @@ function commit(user, repo, path, sha) {
 				response.files.forEach(function(file) {
 					if (file.filename.indexOf(path) > -1) {
 						commitCache[cacheKey] = file;
-						deferred.resolve(response);
+						deferred.resolve(file);
 					}
 				});
 
+			}
+		});
+	}
+
+	return deferred.promise;
+}
+
+function compare(user, repo, base, head, path) {
+	var deferred = q.defer(),
+		cacheKey = user + '/' + repo + '/' + path + '/' + base + '/' + head;
+
+	if (commitCache[cacheKey]) {
+		deferred.resolve(commitCache[cacheKey]);
+	} else {
+		github.repos.compareCommits({
+			user: user,
+			repo: repo,
+			base: base,
+			head: head
+		}, function(error, response) {
+			if (error) {
+				deferred.reject();
+			} else {
+				response.files.forEach(function(file) {
+					if (file.filename.indexOf(path) > -1) {
+						commitCache[cacheKey] = file;
+						deferred.resolve(file);
+					}
+				});
 			}
 		});
 	}
