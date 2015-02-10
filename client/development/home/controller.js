@@ -41,7 +41,7 @@ angular.module('app')
 				});
 			}
 
-			function getCommit(index, repeat) {
+			function getCommit(index, repeat, dontSet) {
 				$http.get('repositories/commit', {
 					params: {
 						user: user,
@@ -51,13 +51,14 @@ angular.module('app')
 					},
 					cache: true
 				}).success(function(response) {
+					if (!dontSet) {
+						$scope.commit = applyPatch(response);
+					}
 					if (repeat) {
 						$scope.commitLoadProgress -= (100 / $scope.commitsLength);
 						if (index) {
-							getCommit(--index, true);
+							getCommit(--index, true, true);
 						}
-					} else {
-						$scope.commit = applyPatch(response);
 					}
 				});
 			}
